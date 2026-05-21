@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useIncidentForm } from "../hooks/useIncidentForm";
 import type { IncidentFormData } from "../schemas/incident.schema";
 import { incidentSchema } from "../schemas/incident.schema";
+import type { Incident } from "../types";
 import {
   Dialog,
   DialogContent,
@@ -21,26 +22,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Edit2 } from "lucide-react";
 
-interface CreateIncidentDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+interface UpdateIncidentDialogProps {
+  incident: Incident;
   onSuccess: () => void;
 }
 
-export function CreateIncidentDialog({
-  open,
-  onOpenChange,
+export function UpdateIncidentDialog({
+  incident,
   onSuccess,
-}: CreateIncidentDialogProps) {
+}: UpdateIncidentDialogProps) {
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<IncidentFormData>({
-    title: "",
-    description: "",
-    status: "open",
+    title: incident.title,
+    description: incident.description,
+    status: incident.status as "open" | "in-progress" | "closed",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const { createIncident, loading, error } = useIncidentForm();
+  const { updateIncident, loading, error } = useIncidentForm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +48,8 @@ export function CreateIncidentDialog({
 
     try {
       const validated = incidentSchema.parse(formData);
-      await createIncident(validated);
-      setFormData({ title: "", description: "", status: "open" });
+      await updateIncident(incident.id, validated);
+      setOpen(false);
       onSuccess();
     } catch (err: any) {
       if (err.issues) {
@@ -63,15 +63,18 @@ export function CreateIncidentDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="text-xs font-bold uppercase">Criar Incidente</Button>
+        <Button variant="outline" size="sm" className="text-xs font-bold uppercase">
+          <Edit2 className="h-4 w-4 mr-2" />
+          Editar
+        </Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-between px-5 gap-5">
         <DialogHeader className="flex flex-col justify-center items-center pt-5 gap-2">
-          <DialogTitle className="uppercase font-bold text-lg">Novo Incidente</DialogTitle>
+          <DialogTitle className="uppercase font-bold text-lg">Atualizar Incidente</DialogTitle>
           <DialogDescription className="hyphens-auto text-justify">
-            Adicione um novo incidente preenchendo o formulário abaixo.
+            Atualize as informações do incidente preenchendo o formulário abaixo.
           </DialogDescription>
         </DialogHeader>
 
@@ -85,7 +88,7 @@ export function CreateIncidentDialog({
 
           <div className="flex flex-col gap-2">
             <label htmlFor="title" className="text-xs font-bold uppercase">
-              Adicione um título:
+              Título:
             </label>
             <Input
               id="title"
@@ -103,7 +106,7 @@ export function CreateIncidentDialog({
 
           <div className="flex flex-col gap-2">
             <label htmlFor="description" className="text-xs font-bold uppercase">
-              Adicione uma descrição:
+              Descrição:
             </label>
             <Textarea
               id="description"
@@ -122,7 +125,7 @@ export function CreateIncidentDialog({
 
           <div className="flex flex-row justify-start items-center gap-2">
             <label htmlFor="status" className="text-xs font-bold uppercase">
-              Adicione um status:
+              Status:
             </label>
             <Select value={formData.status} onValueChange={(value) =>
               setFormData({ ...formData, status: value as "open" | "in-progress" | "closed" })
@@ -142,14 +145,14 @@ export function CreateIncidentDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => setOpen(false)}
               disabled={loading}
               className="text-xs font-bold uppercase"
             >
               Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="text-xs font-bold uppercase">
-              {loading ? "Criando..." : "Criar"}
+              {loading ? "Atualizando..." : "Atualizar"}
             </Button>
           </div>
         </form>

@@ -1,8 +1,6 @@
 import { useState } from "react";
-import type { Incident } from "../types";
 import { useIncidents } from "../hooks/useIncidents";
 import { useIncidentForm } from "../hooks/useIncidentForm";
-import { api } from "../services/api";
 import {
   Card,
   CardContent,
@@ -14,7 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CreateIncidentDialog } from "./CreateIncidentDialog";
-import { AlertCircle, Trash2, Edit2 } from "lucide-react";
+import { UpdateIncidentDialog } from "./UpdateIncidentDialog";
+import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
+import { AlertCircle } from "lucide-react";
 
 const statusColors: Record<string, string> = {
   open: "bg-red-100 text-red-800",
@@ -110,19 +110,14 @@ export function IncidentList() {
               <CardContent className="space-y-4">
                 <p className="text-sm text-foreground">{incident.description}</p>
                 <div className="flex gap-2 justify-end pt-2 border-t">
-                  <Button variant="outline" size="sm" disabled className="text-xs font-bold uppercase">
-                    <Edit2 className="h-4 w-4 mr-2" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(incident.id)}
-                    className="text-xs font-bold uppercase"
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Deletar
-                  </Button>
+                  <UpdateIncidentDialog
+                    incident={incident}
+                    onSuccess={refetch}
+                  />
+                  <DeleteConfirmDialog
+                    incidentTitle={incident.title}
+                    onConfirm={() => handleDelete(incident.id)}
+                  />
                 </div>
               </CardContent>
             </Card>
