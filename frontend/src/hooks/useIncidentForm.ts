@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import type { Incident } from "../types";
+import type { IncidentFormData } from "../schemas/incident.schema";
 import { api } from "../services/api";
 
 export function useIncidentForm() {
@@ -7,7 +8,7 @@ export function useIncidentForm() {
   const [error, setError] = useState<string | null>(null);
 
   const createIncident = useCallback(
-    async (data: Omit<Incident, "id" | "createdAt">) => {
+    async (data: IncidentFormData) => {
       try {
         setLoading(true);
         setError(null);

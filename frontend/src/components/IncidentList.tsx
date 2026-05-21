@@ -15,6 +15,7 @@ import { CreateIncidentDialog } from "./CreateIncidentDialog";
 import { UpdateIncidentDialog } from "./UpdateIncidentDialog";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 import { AlertCircle } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 const statusColors: Record<string, string> = {
   open: "bg-red-100 text-red-800",
@@ -41,34 +42,28 @@ export function IncidentList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-lg text-muted-foreground">Carregando incidentes...</p>
+        <p className="text-xs sm:text-sm md:text-base text-muted-foreground">Carregando incidentes...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
       {error && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+        <Alert variant="destructive" className="text-xs sm:text-sm">
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {deleteError && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+        <Alert variant="destructive" className="text-xs sm:text-sm">
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
           <AlertDescription>{deleteError}</AlertDescription>
         </Alert>
       )}
 
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold uppercase">Incidentes</h2>
-          <p className="text-xs text-muted-foreground mt-1">
-            Total: {incidents.length} incidente{incidents.length !== 1 ? "s" : ""}
-          </p>
-        </div>
+      <div className="flex flex-row justify-around md:justify-start items-center md:gap-5">
         <CreateIncidentDialog
           open={isCreating}
           onOpenChange={setIsCreating}
@@ -77,39 +72,45 @@ export function IncidentList() {
             refetch();
           }}
         />
+        <Separator orientation="vertical"/>
+        <div>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            Total: {incidents.length} incidente{incidents.length !== 1 ? "s" : ""}
+          </p>
+        </div>
       </div>
 
       {incidents.length === 0 ? (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <p className="text-xs text-muted-foreground mb-4">Nenhum incidente encontrado</p>
+        <div className="w-full flex flex-col justify-center items-center bg-transparent">
+          <CardContent className="w-1/2 flex flex-col items-center justify-center gap-10">
+            <p className="text-xs text-muted-foreground uppercase">Nenhum incidente encontrado</p>
             <Button onClick={() => setIsCreating(true)} className="text-xs font-bold uppercase">
-              Criar seu primeiro incidente
+              Reportar incidente
             </Button>
           </CardContent>
-        </Card>
+        </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-3 sm:gap-4">
           {incidents.map((incident) => (
             <Card key={incident.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex-1">
-                    <CardTitle>{incident.title}</CardTitle>
-                    <CardDescription>
+              <CardHeader className="pb-2 sm:pb-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-sm sm:text-base truncate">{incident.title}</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
                       {new Date(incident.createdAt).toLocaleDateString("pt-BR")}
                     </CardDescription>
                   </div>
-                  <Badge className={statusColors[incident.status]}>
+                  <Badge className={`${statusColors[incident.status]} text-xs sm:text-sm flex-shrink-0`}>
                     {incident.status === "open" ? "Aberto" :
                      incident.status === "in-progress" ? "Em Progresso" :
                      "Fechado"}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-foreground">{incident.description}</p>
-                <div className="flex gap-2 justify-end pt-2 border-t">
+              <CardContent className="space-y-3 sm:space-y-4">
+                <p className="text-xs sm:text-sm text-foreground line-clamp-3">{incident.description}</p>
+                <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2 border-t">
                   <UpdateIncidentDialog
                     incident={incident}
                     onSuccess={refetch}
