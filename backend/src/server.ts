@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { incidentRoutes } from "./routes/incident.routes";
 import { logger } from "./logger/logger";
 
@@ -6,6 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 
 // Routes
