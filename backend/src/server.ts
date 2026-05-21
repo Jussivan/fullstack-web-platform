@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { incidentRoutes } from "./routes/incident.routes";
+import { authRoutes } from "./routes/auth.routes";
+import { userRoutes } from "./routes/user.routes";
 import { logger } from "./logger/logger";
 
 const app = express();
@@ -11,6 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/incidents", incidentRoutes);
 
 // Health check

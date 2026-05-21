@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { incidentService } from "../services/incident.service";
 import { logger } from "../logger/logger";
+import type { AuthenticatedRequest } from "../middlewares/auth";
 
 const getAllIncidents = async (req: Request, res: Response) => {
   try {
@@ -27,13 +28,19 @@ const getIncidentById = async (req: Request, res: Response) => {
   }
 };
 
-const createIncident = async (req: Request, res: Response) => {
+const createIncident = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const { title, description, status } = req.body;
     const incident = await incidentService.createIncident({
       title,
       description,
       status,
+      userId: req.userId,
     });
     res.status(201).json(incident);
   } catch (error) {
@@ -42,8 +49,13 @@ const createIncident = async (req: Request, res: Response) => {
   }
 };
 
-const updateIncident = async (req: Request, res: Response) => {
+const updateIncident = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params as { id: string };
     const { title, description, status } = req.body;
     const incident = await incidentService.updateIncident(id, {
@@ -58,8 +70,13 @@ const updateIncident = async (req: Request, res: Response) => {
   }
 };
 
-const deleteIncident = async (req: Request, res: Response) => {
+const deleteIncident = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params as { id: string };
     await incidentService.deleteIncident(id);
     res.status(204).send();

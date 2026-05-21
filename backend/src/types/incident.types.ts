@@ -2,6 +2,7 @@ export interface CreateIncidentInput {
   title: string;
   description: string;
   status: string;
+  userId: string;
 }
 
 export interface UpdateIncidentInput {
@@ -15,5 +16,7 @@ export interface Incident {
   title: string;
   description: string;
   status: string;
+  userId: string;
   createdAt: Date;
+  updatedAt: Date;
 }
