@@ -138,9 +138,8 @@ export function CreateIncidentDialog({
               </SelectContent>
             </Select>
           </div>
-        </form>
-        <Separator orientation="horizontal"/>
-        <div className="flex flex-row justify-around items-center">
+          <Separator orientation="horizontal"/>
+          <div className="flex flex-row justify-around items-center">
             <Button
               type="button"
               variant="outline"
@@ -154,6 +153,7 @@ export function CreateIncidentDialog({
               {loading ? "Reportando..." : "Reportar"}
             </Button>
           </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

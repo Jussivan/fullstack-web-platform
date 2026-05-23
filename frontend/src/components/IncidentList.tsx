@@ -92,22 +92,27 @@ export function IncidentList() {
           </CardContent>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {incidents.map((incident) => (
-            <Card key={incident.id} className="border-1 border-primary/50 hover:border-primary gap-5">
+            <Card key={incident.id} className="max-h-min border-1 border-primary/50 hover:border-primary gap-5">
               <CardHeader>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-5">
                   <div className="flex flex-row justify-between items-center">
-                    <CardTitle className="text-sm sm:text-base truncate">{incident.title}</CardTitle>
-                    <Badge className={`${statusColors[incident.status]} text-xs sm:text-sm flex-shrink-0`}>
+                    <Badge className="text-xs p-2">
+                    {incident.user.name}
+                  </Badge>
+                  <Badge className={`${statusColors[incident.status]} text-xs sm:text-sm flex-shrink-0`}>
                       {incident.status === "open" ? "Aberto" :
                       incident.status === "in-progress" ? "Em Progresso" :
                       "Fechado"}
-                    </Badge>
+                  </Badge>
                   </div>
-                  <CardDescription className="text-xs font-light">
+                  <div className="flex flex-col">
+                    <CardTitle className="text-sm sm:text-base truncate">{incident.title}</CardTitle>
+                    <CardDescription className="text-xs font-light">
                       {new Date(incident.createdAt).toLocaleDateString("pt-BR")}
                     </CardDescription>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="flex flex-col justify-center gap-5">

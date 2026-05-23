@@ -42,7 +42,6 @@ export function UpdateIncidentDialog({
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { updateIncident, loading, error } = useIncidentForm();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -140,9 +139,8 @@ export function UpdateIncidentDialog({
                 <SelectItem value="closed">Fechado</SelectItem>
               </SelectContent>
             </Select>
-          </div>          
-        </form>
-        <Separator orientation="horizontal"/>
+          </div>    
+          <Separator orientation="horizontal"/>
         <div className="flex flex-row justify-around items-center">
             <Button
               type="button"
@@ -156,7 +154,8 @@ export function UpdateIncidentDialog({
             <Button type="submit" disabled={loading} className="text-xs font-bold uppercase">
               {loading ? "Atualizando..." : "Atualizar"}
             </Button>
-        </div>
+        </div>      
+        </form>
       </DialogContent>
     </Dialog>
   );
