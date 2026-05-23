@@ -1,29 +1,29 @@
-# API Documentation
+# Documentação da API
 
-## Base URL
+## URL Base
 ```
 http://localhost:3000/api
 ```
 
-## Authentication
+## Autenticação
 
-All protected endpoints require a Bearer token in the Authorization header:
+Todos os endpoints protegidos exigem um token Bearer no cabeçalho Authorization:
 
 ```
 Authorization: Bearer <token>
 ```
 
-The token is obtained through the login or register endpoints and is valid for 7 days.
+O token é obtido através dos endpoints de login ou registro e é válido por 7 dias.
 
 ---
 
-## Authentication Endpoints
+## Endpoints de Autenticação
 
 ### POST /auth/register
 
-Create a new user account.
+Criar uma nova conta de usuário.
 
-**Request:**
+**Requisição:**
 ```json
 {
   "name": "John Doe",
@@ -32,7 +32,7 @@ Create a new user account.
 }
 ```
 
-**Response (201 Created):**
+**Resposta (201 Created):**
 ```json
 {
   "user": {
@@ -46,18 +46,18 @@ Create a new user account.
 }
 ```
 
-**Status Codes:**
-- 201: User created successfully
-- 400: Invalid input or user already exists
-- 500: Internal server error
+**Códigos de Status:**
+- 201: Usuário criado com sucesso
+- 400: Entrada inválida ou usuário já existe
+- 500: Erro interno do servidor
 
 ---
 
 ### POST /auth/login
 
-Authenticate and receive an authentication token.
+Autenticar e receber um token de autenticação.
 
-**Request:**
+**Requisição:**
 ```json
 {
   "email": "john@example.com",
@@ -65,7 +65,7 @@ Authenticate and receive an authentication token.
 }
 ```
 
-**Response (200 OK):**
+**Resposta (200 OK):**
 ```json
 {
   "user": {
@@ -79,25 +79,25 @@ Authenticate and receive an authentication token.
 }
 ```
 
-**Status Codes:**
-- 200: Authentication successful
-- 400: Invalid credentials
-- 500: Internal server error
+**Códigos de Status:**
+- 200: Autenticação bem-sucedida
+- 400: Credenciais inválidas
+- 500: Erro interno do servidor
 
 ---
 
-## User Endpoints
+## Endpoints de Usuário
 
 ### GET /users/profile
 
-Get the authenticated user's profile information.
+Obter as informações de perfil do usuário autenticado.
 
-**Headers:**
+**Cabeçalhos:**
 ```
 Authorization: Bearer <token>
 ```
 
-**Response (200 OK):**
+**Resposta (200 OK):**
 ```json
 {
   "id": "uuid-string",
@@ -108,32 +108,32 @@ Authorization: Bearer <token>
 }
 ```
 
-**Status Codes:**
-- 200: Profile retrieved successfully
-- 401: Unauthorized (invalid or missing token)
-- 404: User not found
-- 500: Internal server error
+**Códigos de Status:**
+- 200: Perfil recuperado com sucesso
+- 401: Não autorizado (token inválido ou ausente)
+- 404: Usuário não encontrado
+- 500: Erro interno do servidor
 
 ---
 
-## Incident Endpoints
+## Endpoints de Incidentes
 
 ### GET /incidents
 
-Retrieve all incidents with user information.
+Recuperar todos os incidentes com informações do usuário.
 
-**Headers:**
+**Cabeçalhos:**
 ```
-Authorization: Not required
+Authorization: Não obrigatória
 ```
 
-**Response (200 OK):**
+**Resposta (200 OK):**
 ```json
 [
   {
     "id": "uuid-string",
-    "title": "Database Connection Failed",
-    "description": "Unable to connect to the production database",
+    "title": "Falha na Conexão com Banco de Dados",
+    "description": "Não foi possível conectar ao banco de dados de produção",
     "status": "open",
     "userId": "uuid-string",
     "createdAt": "2026-05-22T10:00:00.000Z",
@@ -147,25 +147,25 @@ Authorization: Not required
 ]
 ```
 
-**Status Codes:**
-- 200: Incidents retrieved successfully
-- 500: Internal server error
+**Códigos de Status:**
+- 200: Incidentes recuperados com sucesso
+- 500: Erro interno do servidor
 
 ---
 
 ### GET /incidents/:id
 
-Retrieve a specific incident by ID.
+Recuperar um incidente específico por ID.
 
-**Parameters:**
-- id (string, required): The incident UUID
+**Parâmetros:**
+- id (string, obrigatório): O UUID do incidente
 
-**Response (200 OK):**
+**Resposta (200 OK):**
 ```json
 {
   "id": "uuid-string",
-  "title": "Database Connection Failed",
-  "description": "Unable to connect to the production database",
+  "title": "Falha na Conexão com Banco de Dados",
+  "description": "Não foi possível conectar ao banco de dados de produção",
   "status": "open",
   "userId": "uuid-string",
   "createdAt": "2026-05-22T10:00:00.000Z",
@@ -178,37 +178,37 @@ Retrieve a specific incident by ID.
 }
 ```
 
-**Status Codes:**
-- 200: Incident retrieved successfully
-- 404: Incident not found
-- 500: Internal server error
+**Códigos de Status:**
+- 200: Incidente recuperado com sucesso
+- 404: Incidente não encontrado
+- 500: Erro interno do servidor
 
 ---
 
 ### POST /incidents
 
-Create a new incident. Requires authentication.
+Criar um novo incidente. Requer autenticação.
 
-**Headers:**
+**Cabeçalhos:**
 ```
 Authorization: Bearer <token>
 ```
 
-**Request:**
+**Requisição:**
 ```json
 {
-  "title": "Database Connection Failed",
-  "description": "Unable to connect to the production database",
+  "title": "Falha na Conexão com Banco de Dados",
+  "description": "Não foi possível conectar ao banco de dados de produção",
   "status": "open"
 }
 ```
 
-**Response (201 Created):**
+**Resposta (201 Created):**
 ```json
 {
   "id": "uuid-string",
-  "title": "Database Connection Failed",
-  "description": "Unable to connect to the production database",
+  "title": "Falha na Conexão com Banco de Dados",
+  "description": "Não foi possível conectar ao banco de dados de produção",
   "status": "open",
   "userId": "uuid-string",
   "createdAt": "2026-05-22T10:00:00.000Z",
@@ -221,41 +221,41 @@ Authorization: Bearer <token>
 }
 ```
 
-**Status Codes:**
-- 201: Incident created successfully
-- 400: Invalid input
-- 401: Unauthorized
-- 500: Internal server error
+**Códigos de Status:**
+- 201: Incidente criado com sucesso
+- 400: Entrada inválida
+- 401: Não autorizado
+- 500: Erro interno do servidor
 
 ---
 
 ### PUT /incidents/:id
 
-Update an existing incident. Requires authentication.
+Atualizar um incidente existente. Requer autenticação.
 
-**Headers:**
+**Cabeçalhos:**
 ```
 Authorization: Bearer <token>
 ```
 
-**Parameters:**
-- id (string, required): The incident UUID
+**Parâmetros:**
+- id (string, obrigatório): O UUID do incidente
 
-**Request:**
+**Requisição:**
 ```json
 {
-  "title": "Database Connection Failed - RESOLVED",
-  "description": "Issue was resolved by restarting the database service",
+  "title": "Falha na Conexão com Banco de Dados - RESOLVIDO",
+  "description": "Problema foi resolvido reiniciando o serviço de banco de dados",
   "status": "closed"
 }
 ```
 
-**Response (200 OK):**
+**Resposta (200 OK):**
 ```json
 {
   "id": "uuid-string",
-  "title": "Database Connection Failed - RESOLVED",
-  "description": "Issue was resolved by restarting the database service",
+  "title": "Falha na Conexão com Banco de Dados - RESOLVIDO",
+  "description": "Problema foi resolvido reiniciando o serviço de banco de dados",
   "status": "closed",
   "userId": "uuid-string",
   "createdAt": "2026-05-22T10:00:00.000Z",
@@ -268,75 +268,75 @@ Authorization: Bearer <token>
 }
 ```
 
-**Status Codes:**
-- 200: Incident updated successfully
-- 400: Invalid input
-- 401: Unauthorized
-- 404: Incident not found
-- 500: Internal server error
+**Códigos de Status:**
+- 200: Incidente atualizado com sucesso
+- 400: Entrada inválida
+- 401: Não autorizado
+- 404: Incidente não encontrado
+- 500: Erro interno do servidor
 
 ---
 
 ### DELETE /incidents/:id
 
-Delete an incident. Requires authentication.
+Deletar um incidente. Requer autenticação.
 
-**Headers:**
+**Cabeçalhos:**
 ```
 Authorization: Bearer <token>
 ```
 
-**Parameters:**
-- id (string, required): The incident UUID
+**Parâmetros:**
+- id (string, obrigatório): O UUID do incidente
 
-**Response (204 No Content):**
+**Resposta (204 No Content):**
 ```
-(empty body)
+(corpo vazio)
 ```
 
-**Status Codes:**
-- 204: Incident deleted successfully
-- 401: Unauthorized
-- 404: Incident not found
-- 500: Internal server error
+**Códigos de Status:**
+- 204: Incidente deletado com sucesso
+- 401: Não autorizado
+- 404: Incidente não encontrado
+- 500: Erro interno do servidor
 
 ---
 
-## Status Values
+## Valores de Status
 
-The following status values are valid for incidents:
+Os seguintes valores de status são válidos para incidentes:
 
-- open: The incident is newly reported and open for investigation
-- in-progress: The incident is currently being worked on
-- closed: The incident has been resolved
+- open: O incidente foi reportado e está aberto para investigação
+- in-progress: O incidente está sendo tratado
+- closed: O incidente foi resolvido
 
 ---
 
-## Error Responses
+## Respostas de Erro
 
-All error responses follow this format:
+Todas as respostas de erro seguem este formato:
 
 ```json
 {
-  "error": "Error message describing what went wrong"
+  "error": "Mensagem de erro descrevendo o que correu mal"
 }
 ```
 
-Common error scenarios:
+Cenários de erro comuns:
 
-- 400 Bad Request: Invalid input data or missing required fields
-- 401 Unauthorized: Missing or invalid authentication token
-- 404 Not Found: Resource does not exist
-- 500 Internal Server Error: Unexpected server error
-
----
-
-## Rate Limiting
-
-Currently, there are no rate limits implemented. This is recommended for production deployment.
+- 400 Bad Request: Dados inválidos ou campos obrigatórios ausentes
+- 401 Unauthorized: Token de autenticação ausente ou inválido
+- 404 Not Found: Recurso não existe
+- 500 Internal Server Error: Erro inesperado do servidor
 
 ---
 
-## Pagination
+## Limite de Taxa
 
-Currently, the API returns all results without pagination. For large datasets, consider implementing pagination in future versions.
+Atualmente, não há limite de taxa implementado. Isto é recomendado para implantação em produção.
+
+---
+
+## Paginação
+
+Atualmente, a API retorna todos os resultados sem paginação. Para grandes conjuntos de dados, considere implementar paginação em versões futuras.

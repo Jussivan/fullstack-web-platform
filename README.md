@@ -1,98 +1,98 @@
-# Fullstack Web Platform - Incident Management System
+# Plataforma Web Full-stack - Sistema de Gerenciamento de Incidentes
 
-A production-ready fullstack application for incident management built with modern technologies and best practices.
+Uma aplicação fullstack pronta para produção para gerenciamento de incidentes construída com tecnologias modernas e melhores práticas.
 
-## Overview
+## Visão Geral
 
-This project implements a complete incident reporting and management system with user authentication, real-time incident tracking, and a responsive user interface. The application demonstrates comprehensive full-stack development practices including backend API development, database design, frontend architecture, and extensive testing.
+Este projeto implementa um sistema completo de relatório e gerenciamento de incidentes com autenticação de usuários, rastreamento de incidentes em tempo real e uma interface responsiva. A aplicação demonstra práticas abrangentes de desenvolvimento full-stack, incluindo desenvolvimento de API backend, design de banco de dados, arquitetura frontend e testes extensivos.
 
-## Features
+## Recursos
 
-- User authentication with JWT tokens (7-day expiration)
-- Create, read, update, and delete incidents
-- Real-time user association with incidents
-- Responsive design for mobile and desktop
-- Comprehensive input validation on client and server
-- Dark mode interface
-- User profile management
-- 38 passing tests (19 backend, 19 frontend)
+- Autenticação de usuários com tokens JWT (expiração de 7 dias)
+- Criar, ler, atualizar e deletar incidentes
+- Associação de usuários em tempo real com incidentes
+- Design responsivo para dispositivos móveis e desktop
+- Validação abrangente de entrada no cliente e servidor
+- Interface modo escuro
+- Gerenciamento de perfil de usuário
+- 38 testes aprovados (19 backend, 19 frontend)
 
-## Technology Stack
+## Stack Tecnológico
 
 ### Backend
-- Express.js: RESTful API framework
-- TypeScript: Static type checking
-- Prisma: Type-safe ORM with SQLite
-- JWT: Secure token-based authentication
-- Bcrypt: Password hashing (10 salt rounds)
-- Zod: Runtime type validation
-- Jest: Unit testing framework
+- Express.js: Framework API RESTful
+- TypeScript: Verificação de tipo estático
+- Prisma: ORM type-safe com SQLite
+- JWT: Autenticação baseada em token seguro
+- Bcrypt: Hashing de senha (10 rodadas de salt)
+- Zod: Validação de tipo em tempo de execução
+- Jest: Framework de teste unitário
 
 ### Frontend
-- React 18: Modern UI library with hooks
-- TypeScript: Full type safety
-- Vite: Lightning-fast build tool
-- Tailwind CSS: Utility-first CSS framework
-- Shadcn/ui: High-quality component library
-- React Router: Client-side routing
-- Vitest: Component and hook testing
+- React 18: Biblioteca moderna de UI com hooks
+- TypeScript: Segurança de tipo completa
+- Vite: Ferramenta de build extremamente rápida
+- Tailwind CSS: Framework CSS utility-first
+- Shadcn/ui: Biblioteca de componentes de alta qualidade
+- React Router: Roteamento client-side
+- Vitest: Teste de componentes e hooks
 
-## Prerequisites
+## Pré-requisitos
 
-Node.js v18.0.0 or higher
-npm v9.0.0 or higher
+Node.js v18.0.0 ou superior
+npm v9.0.0 ou superior
 
-Verify installation:
+Verifique a instalação:
 ```bash
 node --version
 npm --version
 ```
 
-## Installation and Setup
+## Instalação e Configuração
 
-### 1. Clone Repository
+### 1. Clonar Repositório
 
 ```bash
 git clone https://github.com/yourusername/fullstack-web-platform.git
 cd fullstack-web-platform
 ```
 
-### 2. Backend Configuration
+### 2. Configuração do Backend
 
 ```bash
 cd backend
 
 npm install
 
-# Create .env file
+# Criar arquivo .env
 cp .env.example .env
 
-# Set up database and run migrations
+# Configurar banco de dados e executar migrações
 npx prisma migrate dev
 
-# Start development server
+# Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-Backend runs on http://localhost:3000
+Backend roda em http://localhost:3000
 
-### 3. Frontend Configuration
+### 3. Configuração do Frontend
 
 ```bash
 cd frontend
 
 npm install
 
-# Create .env file
+# Criar arquivo .env
 VITE_API_URL=http://localhost:3000/api
 
-# Start development server
+# Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-Frontend runs on http://localhost:5173
+Frontend roda em http://localhost:5173
 
-## Environment Variables
+## Variáveis de Ambiente
 
 ### Backend (.env)
 
@@ -109,205 +109,205 @@ PORT=3000
 VITE_API_URL="http://localhost:3000/api"
 ```
 
-## Running Tests
+## Executar Testes
 
-### Backend Tests
+### Testes do Backend
 
 ```bash
 cd backend
-npm test                 # Run all tests
-npm run test:watch      # Watch mode
-npm run test:coverage   # Coverage report
+npm test                 # Executar todos os testes
+npm run test:watch      # Modo watch
+npm run test:coverage   # Relatório de cobertura
 ```
 
-Test coverage: 19 passing tests
-- Auth service validation (password hashing, JWT, email validation)
-- Incident service validation (data structure, status management)
+Cobertura de testes: 19 testes aprovados
+- Validação de serviço de autenticação (hashing de senha, JWT, validação de email)
+- Validação de serviço de incidente (estrutura de dados, gerenciamento de status)
 
-### Frontend Tests
+### Testes do Frontend
 
 ```bash
 cd frontend
-npm test -- --run       # Run once
-npm test                # Watch mode
-npm test:ui             # UI mode
+npm test -- --run       # Executar uma vez
+npm test                # Modo watch
+npm test:ui             # Modo UI
 ```
 
-Test coverage: 19 passing tests
-- Authentication context and token management
-- Incidents hook and data fetching
-- Component rendering and interactions
+Cobertura de testes: 19 testes aprovados
+- Contexto de autenticação e gerenciamento de token
+- Hook de incidentes e busca de dados
+- Renderização de componentes e interações
 
-## Project Structure
+## Estrutura do Projeto
 
 ```
 fullstack-web-platform/
 ├── backend/
 │   ├── src/
-│   │   ├── server.ts              Main application
-│   │   ├── controllers/           Route handlers
-│   │   ├── services/              Business logic
-│   │   ├── routes/                API route definitions
-│   │   ├── middlewares/           Express middleware
-│   │   ├── lib/                   Utilities and configuration
-│   │   ├── logger/                Logging system
-│   │   ├── types/                 TypeScript definitions
-│   │   └── __tests__/             Test files (19 tests)
+│   │   ├── server.ts              Aplicação principal
+│   │   ├── controllers/           Manipuladores de rota
+│   │   ├── services/              Lógica de negócio
+│   │   ├── routes/                Definições de rota da API
+│   │   ├── middlewares/           Middleware Express
+│   │   ├── lib/                   Utilitários e configuração
+│   │   ├── logger/                Sistema de logging
+│   │   ├── types/                 Definições TypeScript
+│   │   └── __tests__/             Arquivos de teste (19 testes)
 │   ├── prisma/
-│   │   ├── schema.prisma          Database schema
-│   │   └── migrations/            Database migrations
-│   ├── jest.config.js             Test configuration
+│   │   ├── schema.prisma          Schema do banco de dados
+│   │   └── migrations/            Migrações do banco de dados
+│   ├── jest.config.js             Configuração de testes
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── main.tsx               Entry point
-│   │   ├── App.tsx                Root component
-│   │   ├── pages/                 Page components
-│   │   ├── components/            Reusable components
-│   │   ├── context/               React context providers
-│   │   ├── hooks/                 Custom React hooks
-│   │   ├── services/              API client
-│   │   ├── types/                 TypeScript definitions
-│   │   └── __tests__/             Test files (19 tests)
-│   ├── vitest.config.ts           Test configuration
+│   │   ├── main.tsx               Ponto de entrada
+│   │   ├── App.tsx                Componente raiz
+│   │   ├── pages/                 Componentes de página
+│   │   ├── components/            Componentes reutilizáveis
+│   │   ├── context/               Provedores de contexto React
+│   │   ├── hooks/                 Hooks React customizados
+│   │   ├── services/              Cliente de API
+│   │   ├── types/                 Definições TypeScript
+│   │   └── __tests__/             Arquivos de teste (19 testes)
+│   ├── vitest.config.ts           Configuração de testes
 │   └── package.json
 │
-├── API.md                         Complete API documentation
-├── TECHNICAL_NOTES.md             Architecture and design decisions
-└── README.md                      This file
+├── API.md                         Documentação completa da API
+├── TECHNICAL_NOTES.md             Arquitetura e decisões de design
+└── README.md                      Este arquivo
 ```
 
-## API Documentation
+## Documentação da API
 
-For complete endpoint documentation with examples, see [API.md](./API.md)
+Para documentação completa de endpoints com exemplos, veja [API.md](./API.md)
 
-Quick reference:
-- POST /api/auth/register: User registration
-- POST /api/auth/login: Authentication
-- GET /api/users/profile: User profile
-- GET /api/incidents: List incidents
-- POST /api/incidents: Create incident
-- PUT /api/incidents/:id: Update incident
-- DELETE /api/incidents/:id: Delete incident
+Referência rápida:
+- POST /api/auth/register: Registro de usuário
+- POST /api/auth/login: Autenticação
+- GET /api/users/profile: Perfil do usuário
+- GET /api/incidents: Listar incidentes
+- POST /api/incidents: Criar incidente
+- PUT /api/incidents/:id: Atualizar incidente
+- DELETE /api/incidents/:id: Deletar incidente
 
-## Database Schema
+## Schema do Banco de Dados
 
-### User Table
-- id: UUID primary key
-- email: Unique email
-- name: Full name
-- password: Bcrypt hashed
+### Tabela de Usuário
+- id: Chave primária UUID
+- email: Email único
+- name: Nome completo
+- password: Hash bcrypt
 - createdAt: Timestamp
 - updatedAt: Timestamp
 
-### Incident Table
-- id: UUID primary key
-- title: Incident title
-- description: Detailed description
+### Tabela de Incidente
+- id: Chave primária UUID
+- title: Título do incidente
+- description: Descrição detalhada
 - status: open | in-progress | closed
-- userId: Foreign key to User
+- userId: Chave estrangeira para Usuário
 - createdAt: Timestamp
 - updatedAt: Timestamp
-- user: Related user data (included in queries)
+- user: Dados de usuário relacionado (incluído em consultas)
 
-## Authentication
+## Autenticação
 
-JWT-based authentication with 7-day token expiration:
+Autenticação baseada em JWT com expiração de token de 7 dias:
 
-1. User registers or logs in
-2. Server returns JWT token
-3. Client stores token in localStorage
-4. Token sent in Authorization header for protected routes
-5. Server validates token on each request
+1. Usuário se registra ou faz login
+2. Servidor retorna token JWT
+3. Cliente armazena token em localStorage
+4. Token enviado no cabeçalho Authorization para rotas protegidas
+5. Servidor valida token em cada requisição
 
-Security measures:
-- Passwords hashed with bcrypt (10 rounds)
-- No password returned in API responses
-- JWT tokens expire after 7 days
-- Minimum password length: 6 characters
+Medidas de segurança:
+- Senhas hash com bcrypt (10 rodadas)
+- Nenhuma senha retornada nas respostas da API
+- Tokens JWT expiram após 7 dias
+- Comprimento mínimo de senha: 6 caracteres
 
-## Validation
+## Validação
 
-Comprehensive validation implemented on both layers:
+Validação abrangente implementada em ambas as camadas:
 
 Frontend:
-- Real-time form validation with Zod
-- User-friendly error messages
-- Input type and length validation
+- Validação de formulário em tempo real com Zod
+- Mensagens de erro amigáveis ao usuário
+- Validação de tipo e comprimento de entrada
 
 Backend:
-- Zod schema validation
-- Business logic validation
-- Database constraint validation
+- Validação de schema Zod
+- Validação de lógica de negócio
+- Validação de restrição de banco de dados
 
-## Error Handling
+## Tratamento de Erros
 
-Consistent error responses with:
-- Descriptive error messages
-- Appropriate HTTP status codes
-- Error logging for debugging
-- User-friendly frontend messages
+Respostas de erro consistentes com:
+- Mensagens de erro descritivas
+- Códigos de status HTTP apropriados
+- Logging de erro para debugging
+- Mensagens amigáveis ao usuário no frontend
 
-## Troubleshooting
+## Resolução de Problemas
 
-### Port Already in Use
+### Porta Já em Uso
 ```bash
 PORT=3001 npm run dev    # Backend
 VITE_PORT=5174 npm run dev  # Frontend
 ```
 
-### Database Issues
+### Problemas de Banco de Dados
 ```bash
 cd backend
-npx prisma migrate reset    # Reset database
-npx prisma db push          # Push schema
+npx prisma migrate reset    # Resetar banco de dados
+npx prisma db push          # Fazer push de schema
 ```
 
-### Dependencies Not Installing
+### Dependências Não Instalando
 ```bash
 npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Backend Connection Issues
-- Verify backend running on http://localhost:3000
-- Check VITE_API_URL in frontend .env
-- Confirm CORS enabled
-- Check firewall settings
+### Problemas de Conexão com Backend
+- Verifique se backend está rodando em http://localhost:3000
+- Verifique VITE_API_URL no arquivo .env do frontend
+- Confirme se CORS está ativado
+- Verifique configurações de firewall
 
-## Performance Considerations
+## Considerações de Performance
 
-- Lazy loading on routes
-- Component memoization
-- Optimized database queries with relations
-- CSS bundling optimized by Tailwind
-- Minified production builds
+- Lazy loading em rotas
+- Memoização de componentes
+- Consultas de banco de dados otimizadas com relações
+- CSS bundling otimizado por Tailwind
+- Builds de produção minificados
 
-## Security Considerations
+## Considerações de Segurança
 
-Production recommendations:
-- Enable HTTPS/SSL
-- Implement rate limiting
-- Add request logging and monitoring
-- Use environment-specific configurations
-- Implement request/response encryption
-- Set up automated backups
-- Enable API request throttling
+Recomendações para produção:
+- Ativar HTTPS/SSL
+- Implementar limite de taxa
+- Adicionar logging e monitoramento de requisição
+- Usar configurações específicas de ambiente
+- Implementar criptografia de requisição/resposta
+- Configurar backups automatizados
+- Ativar throttling de requisição da API
 
-## Development Workflow
+## Fluxo de Desenvolvimento
 
-1. Create feature branch
-2. Make changes with tests
-3. Run test suites to verify
-4. Commit with descriptive messages
-5. Push to repository
+1. Criar branch de feature
+2. Fazer alterações com testes
+3. Executar suites de testes para verificar
+4. Fazer commit com mensagens descritivas
+5. Fazer push para repositório
 
-## License
+## Licença
 
 MIT License
 
-## Support
+## Suporte
 
-For issues or questions, create an issue in the repository.
+Para problemas ou dúvidas, crie uma issue no repositório.

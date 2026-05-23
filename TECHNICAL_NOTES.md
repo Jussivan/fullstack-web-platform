@@ -1,560 +1,560 @@
-# Technical Notes - Architecture and Design Decisions
+# Notas Técnicas - Arquitetura e Decisões de Design
 
-## Executive Summary
+## Resumo Executivo
 
-This document outlines the architectural decisions, design patterns, trade-offs, and future recommendations for the Fullstack Web Platform incident management system. These notes provide insight into the engineering considerations that shaped the implementation.
+Este documento apresenta as decisões arquiteturais, padrões de design, trade-offs e recomendações futuras para o sistema de gerenciamento de incidentes Plataforma Web Full-stack. Estas notas fornecem insights sobre as considerações de engenharia que moldaram a implementação.
 
-## Architectural Overview
+## Visão Geral Arquitetural
 
-The application follows a three-tier architecture:
+A aplicação segue uma arquitetura de três camadas:
 
-1. Presentation Layer (React frontend with Vite)
-2. Application Layer (Express.js REST API)
-3. Data Layer (Prisma ORM with SQLite)
+1. Camada de Apresentação (Frontend React com Vite)
+2. Camada de Aplicação (API REST Express.js)
+3. Camada de Dados (Prisma ORM com SQLite)
 
-This separation enables clear responsibility boundaries, improved testability, and independent scalability of each layer.
+Esta separação permite limites de responsabilidade claros, testabilidade melhorada e escalabilidade independente de cada camada.
 
-## Backend Architecture Decisions
+## Decisões de Arquitetura do Backend
 
-### 1. Framework Selection: Express.js
+### 1. Seleção de Framework: Express.js
 
-Decision: Use Express.js for the REST API framework
+Decisão: Usar Express.js como framework de API REST
 
-Rationale:
-- Minimal and flexible framework ideal for custom API design
-- Extensive middleware ecosystem for common requirements
-- Large community with extensive documentation
-- Proven stability for production applications
-- Excellent TypeScript support
+Fundamentação:
+- Framework minimalista e flexível ideal para design de API customizado
+- Ecossistema extenso de middleware para requisitos comuns
+- Grande comunidade com documentação extensiva
+- Estabilidade comprovada para aplicações de produção
+- Suporte excelente para TypeScript
 
-Alternatives Considered:
-- Fastify: Faster performance but smaller ecosystem
-- NestJS: More opinionated structure, steeper learning curve
-- Hono: Modern but less mature ecosystem
+Alternativas Consideradas:
+- Fastify: Performance mais rápida mas ecossistema menor
+- NestJS: Estrutura mais opinativa, curva de aprendizado mais acentuada
+- Hono: Moderno mas ecossistema menos maduro
 
-Trade-off: Express is lighter weight but requires more manual configuration compared to full frameworks.
+Trade-off: Express é mais leve mas requer mais configuração manual comparado a frameworks completos.
 
-### 2. ORM Selection: Prisma
+### 2. Seleção de ORM: Prisma
 
-Decision: Use Prisma as the object-relational mapping layer
+Decisão: Usar Prisma como camada de mapeamento objeto-relacional
 
-Rationale:
-- Built-in TypeScript support with generated types
-- Intuitive query API that prevents SQL injection
-- Automatic migrations system
-- Excellent developer experience with IDE autocomplete
-- Query relations in single operation (include/select)
-- Introspection capabilities
+Fundamentação:
+- Suporte TypeScript built-in com tipos gerados
+- Query API intuitiva que previne SQL injection
+- Sistema de migrações automáticas
+- Excelente experiência de desenvolvimento com autocomplete do IDE
+- Query relations em operação única (include/select)
+- Capacidades de introspection
 
-Alternatives Considered:
-- TypeORM: More verbose query syntax
-- Sequelize: Less type-safe than Prisma
-- Raw SQL: Loss of type safety and ORM benefits
+Alternativas Consideradas:
+- TypeORM: Sintaxe de query mais verbosa
+- Sequelize: Menos type-safe que Prisma
+- SQL bruto: Perda de type safety e benefícios de ORM
 
-Trade-off: Prisma abstracts SQL details but reduces low-level query optimization control.
+Trade-off: Prisma abstrai detalhes de SQL mas reduz controle de otimização de query em baixo nível.
 
-### 3. Database Selection: SQLite
+### 3. Seleção de Banco de Dados: SQLite
 
-Decision: Use SQLite for development and light production workloads
+Decisão: Usar SQLite para desenvolvimento e cargas de trabalho leves em produção
 
-Rationale:
-- No external database server required for development
-- File-based storage simplifies deployment for small-scale apps
-- ACID compliance ensures data integrity
-- Excellent performance for read-heavy workloads
-- Easy backup and migration strategies
+Fundamentação:
+- Não requer servidor de banco de dados externo para desenvolvimento
+- Armazenamento baseado em arquivo simplifica deployment para apps pequenos
+- Conformidade ACID garante integridade de dados
+- Excelente performance para workloads read-heavy
+- Estratégias fáceis de backup e migração
 
-Alternatives Considered:
-- PostgreSQL: Better for high-concurrency scenarios
-- MySQL: Broader ecosystem but more complex setup
+Alternativas Consideradas:
+- PostgreSQL: Melhor para cenários de alta concorrência
+- MySQL: Ecossistema mais amplo mas setup mais complexo
 
-Trade-off: SQLite is ideal for development and small deployments but has limitations for high-traffic production environments.
+Trade-off: SQLite é ideal para desenvolvimento e deployments pequenos mas tem limitações para ambientes de produção de alto tráfego.
 
-### 4. Authentication: JWT with Bcrypt
+### 4. Autenticação: JWT com Bcrypt
 
-Decision: Implement stateless authentication using JWT tokens with bcrypt password hashing
+Decisão: Implementar autenticação stateless usando tokens JWT com hashing de senha bcrypt
 
-Rationale:
-- Stateless authentication enables horizontal scaling
-- JWT tokens carry user information, reducing database queries
-- Standard approach widely understood by teams
-- Bcrypt provides strong cryptographic hashing with salt
+Fundamentação:
+- Autenticação stateless permite escalabilidade horizontal
+- Tokens JWT carregam informações de usuário, reduzindo queries de banco de dados
+- Abordagem padrão amplamente compreendida por equipes
+- Bcrypt fornece hashing criptográfico forte com salt
 
-Implementation Details:
-- Token expiration: 7 days
-- Bcrypt salt rounds: 10
-- Token signing algorithm: HS256
-- Stored in localStorage on client side
+Detalhes de Implementação:
+- Expiração de token: 7 dias
+- Rodadas de salt Bcrypt: 10
+- Algoritmo de assinatura de token: HS256
+- Armazenado em localStorage no lado cliente
 
-Considerations for Production:
-- Consider implementing refresh token rotation
-- Add token blacklisting for logout
-- Use environment-specific JWT secrets
-- Implement rate limiting on login attempts
+Considerações para Produção:
+- Considerar implementar rotação de token de refresh
+- Adicionar blacklist de token para logout
+- Usar JWT secrets específicos de ambiente
+- Implementar limite de taxa em tentativas de login
 
-### 5. Validation: Zod Runtime Validation
+### 5. Validação: Zod - Validação de Tipo em Tempo de Execução
 
-Decision: Use Zod for runtime type validation on API endpoints
+Decisão: Usar Zod para validação de tipo em tempo de execução em endpoints de API
 
-Rationale:
-- Provides type inference from schema definitions
-- Runtime validation catches malformed requests
-- Clear error messages for invalid data
-- Works seamlessly with TypeScript
+Fundamentação:
+- Fornece type inference a partir de definições de schema
+- Validação em tempo de execução captura requisições malformadas
+- Mensagens de erro claras para dados inválidos
+- Funciona perfeitamente com TypeScript
 
-Alternatives Considered:
-- Joi: More verbose syntax
-- Yup: Similar to Zod but less type-safe
-- Manual validation: Repetitive and error-prone
+Alternativas Consideradas:
+- Joi: Sintaxe mais verbosa
+- Yup: Similar a Zod mas menos type-safe
+- Validação manual: Repetitiva e propensa a erros
 
-Trade-off: Runtime validation adds overhead but ensures data integrity and security.
+Trade-off: Validação em tempo de execução adiciona overhead mas garante integridade de dados e segurança.
 
-### 6. Logging: Console-based Logger
+### 6. Logging: Logger Baseado em Console
 
-Decision: Implement console-based logging for diagnostics
+Decisão: Implementar logging baseado em console para diagnósticos
 
-Rationale:
-- Simple implementation suitable for development
-- Standard output captured by deployment platforms
-- Extensible for future logging services
+Fundamentação:
+- Implementação simples adequada para desenvolvimento
+- Saída padrão capturada por plataformas de deployment
+- Extensível para serviços de logging futuro
 
-Production Recommendations:
-- Integrate with external logging services (DataDog, LogRocket, etc.)
-- Structured logging with contextual metadata
-- Different log levels for different environments
-- Log aggregation and analysis
+Recomendações para Produção:
+- Integrar com serviços de logging externos (DataDog, LogRocket, etc.)
+- Logging estruturado com metadados contextuais
+- Diferentes níveis de log para diferentes ambientes
+- Agregação e análise de log
 
-### 7. Error Handling
+### 7. Tratamento de Erro
 
-Decision: Implement consistent error response format across all endpoints
+Decisão: Implementar formato consistente de resposta de erro em todos os endpoints
 
-Error Response Format:
+Formato de Resposta de Erro:
 ```json
 {
-  "error": "Descriptive error message"
+  "error": "Mensagem de erro descritiva"
 }
 ```
 
-Status Code Strategy:
-- 200: Successful retrieval
-- 201: Successful creation
-- 204: Successful deletion
-- 400: Invalid input
-- 401: Unauthorized/Invalid credentials
-- 404: Resource not found
-- 500: Unexpected server error
+Estratégia de Código de Status:
+- 200: Recuperação bem-sucedida
+- 201: Criação bem-sucedida
+- 204: Deleção bem-sucedida
+- 400: Entrada inválida
+- 401: Não autorizado/Credenciais inválidas
+- 404: Recurso não encontrado
+- 500: Erro inesperado do servidor
 
-Benefits:
-- Predictable error handling on frontend
-- Easier debugging with consistent messages
-- Better user experience with clear error feedback
+Benefícios:
+- Tratamento de erro previsível no frontend
+- Debugging mais fácil com mensagens consistentes
+- Melhor experiência do usuário com feedback claro de erro
 
-## Frontend Architecture Decisions
+## Decisões de Arquitetura do Frontend
 
-### 1. Framework Selection: React 18
+### 1. Seleção de Framework: React 18
 
-Decision: Use React 18 with functional components and hooks
+Decisão: Usar React 18 com componentes funcionais e hooks
 
-Rationale:
-- Component-based architecture for reusability
-- Hooks provide cleaner state management than class components
-- Concurrent rendering capabilities
-- Excellent tooling and community support
-- React Router for client-side routing
+Fundamentação:
+- Arquitetura baseada em componentes para reusabilidade
+- Hooks fornecem gerenciamento de estado mais limpo que componentes de classe
+- Capacidades de renderização concorrente
+- Excelente suporte de ferramentas e comunidade
+- React Router para roteamento client-side
 
-Architecture Patterns:
-- Custom hooks for logic extraction (useAuth, useIncidents)
-- Context API for global state management
-- Component composition over inheritance
-- Separation of presentational and container components
+Padrões de Arquitetura:
+- Custom hooks para extração de lógica (useAuth, useIncidents)
+- Context API para gerenciamento de estado global
+- Composição de componentes sobre herança
+- Separação de componentes apresentacionais e container
 
-### 2. Build Tool: Vite
+### 2. Ferramenta de Build: Vite
 
-Decision: Use Vite as the build tool and development server
+Decisão: Usar Vite como ferramenta de build e servidor de desenvolvimento
 
-Rationale:
-- Extremely fast hot module replacement (HMR)
-- Modern ES modules approach
-- Optimized production builds
-- Minimal configuration required
-- Native TypeScript support
+Fundamentação:
+- Substituição de módulo quente (HMR) extremamente rápida
+- Abordagem de módulos ES modernos
+- Builds de produção otimizados
+- Configuração mínima necessária
+- Suporte nativo a TypeScript
 
-Performance Improvements:
-- Development server starts in milliseconds
-- Instant HMR on file changes
-- Tree-shaking for optimized bundles
-- Lazy-loaded route components
+Melhorias de Performance:
+- Servidor de desenvolvimento inicia em milissegundos
+- HMR instantâneo em mudanças de arquivo
+- Tree-shaking para bundles otimizados
+- Componentes de rota carregados com lazy loading
 
-### 3. Styling: Tailwind CSS
+### 3. Estilo: Tailwind CSS
 
-Decision: Use Tailwind CSS utility-first framework
+Decisão: Usar Tailwind CSS framework utility-first
 
-Rationale:
-- Rapid development with pre-defined utilities
-- Consistent design system via configuration
-- Minimal CSS generated through PurgeCSS
-- Excellent IDE integration
-- Responsive design built-in
+Fundamentação:
+- Desenvolvimento rápido com utilidades pré-definidas
+- Sistema de design consistente via configuração
+- CSS mínimo gerado através de PurgeCSS
+- Integração excelente do IDE
+- Design responsivo built-in
 
 Trade-offs:
-- HTML markup becomes verbose with class names
-- Initial learning curve for utility-first approach
-- Bundle size slightly larger than minimal CSS
+- Markup HTML fica verboso com class names
+- Curva de aprendizado inicial para abordagem utility-first
+- Bundle size ligeiramente maior que CSS mínimo
 
-### 4. Component Library: Shadcn/ui
+### 4. Biblioteca de Componentes: Shadcn/ui
 
-Decision: Use Shadcn/ui as component library
+Decisão: Usar Shadcn/ui como biblioteca de componentes
 
-Rationale:
-- Built on Radix UI (accessible base components)
-- Fully customizable with Tailwind
-- Copy-paste based approach (not node_modules)
-- Excellent TypeScript support
-- Modern, polished components
+Fundamentação:
+- Built-in em Radix UI (componentes de base acessíveis)
+- Totalmente customizável com Tailwind
+- Abordagem copy-paste (não node_modules)
+- Suporte excelente a TypeScript
+- Componentes modernos e polidos
 
-Benefits:
-- Not locked into node_modules versions
-- Components can be customized for project needs
-- Reduced dependency bloat
-- Better control over component updates
+Benefícios:
+- Não locked-in versões de node_modules
+- Componentes podem ser customizados para necessidades do projeto
+- Redução de bloat de dependências
+- Melhor controle sobre atualizações de componentes
 
-### 5. State Management: Context API + Custom Hooks
+### 5. Gerenciamento de Estado: Context API + Custom Hooks
 
-Decision: Implement state management with Context API and custom hooks
+Decisão: Implementar gerenciamento de estado com Context API e custom hooks
 
-Rationale:
-- No additional library overhead
-- Sufficient for application scope
-- Easy to understand and maintain
-- Built-in React feature
+Fundamentação:
+- Sem overhead de biblioteca adicional
+- Suficiente para escopo de aplicação
+- Fácil de entender e manter
+- Feature built-in do React
 
-State Patterns:
-- AuthContext: User authentication and profile state
-- useIncidents Hook: Incident data fetching and caching
-- useIncidentForm Hook: Form state management
+Padrões de Estado:
+- AuthContext: Estado de autenticação de usuário e perfil
+- useIncidents Hook: Busca de dados de incidente e caching
+- useIncidentForm Hook: Gerenciamento de estado de formulário
 
-When to Upgrade:
-- If state complexity significantly increases
-- For time-travel debugging needs
-- For large team collaboration
-- Consider Redux or Zustand
+Quando Fazer Upgrade:
+- Se complexidade de estado aumentar significativamente
+- Para necessidades de time-travel debugging
+- Para colaboração de equipe grande
+- Considerar Redux ou Zustand
 
-### 6. Form Validation: Zod Integration
+### 6. Validação de Formulário: Integração Zod
 
-Decision: Use Zod for client-side form validation
+Decisão: Usar Zod para validação de formulário client-side
 
-Rationale:
-- Single source of truth for validation rules
-- Type-safe form handling
-- Server and client validation consistency
-- Better user experience with real-time validation
+Fundamentação:
+- Uma única fonte de verdade para regras de validação
+- Gerenciamento de formulário type-safe
+- Consistência de validação servidor e cliente
+- Melhor experiência de usuário com validação em tempo real
 
-Implementation:
-- Validation schemas colocated with component logic
-- Real-time validation feedback
-- Error message display
-- Form submission with validated data
+Implementação:
+- Schemas de validação colocalizados com lógica de componente
+- Validação em tempo real feedback
+- Exibição de mensagem de erro
+- Submissão de formulário com dados validados
 
-### 7. API Client: Fetch API with Service Layer
+### 7. Cliente de API: Fetch API com Camada de Serviço
 
-Decision: Build custom API client layer using Fetch API
+Decisão: Construir camada de cliente de API customizada usando Fetch API
 
-Rationale:
-- No additional HTTP client library needed
-- Fetch API is standardized and widely supported
-- Custom layer allows project-specific requirements
-- Easy to add authentication header management
+Fundamentação:
+- Sem biblioteca de cliente HTTP adicional necessária
+- Fetch API é padronizado e amplamente suportado
+- Camada customizada permite requisitos específicos do projeto
+- Fácil adicionar gerenciamento de header de autenticação
 
-Service Layer Benefits:
-- Centralized API endpoint definitions
-- Consistent error handling
-- Easy to mock for testing
-- Simplified token management
+Benefícios da Camada de Serviço:
+- Definições de endpoint da API centralizadas
+- Tratamento de erro consistente
+- Fácil fazer mock para testes
+- Gerenciamento de token simplificado
 
-## Cross-Layer Decisions
+## Decisões Cross-Layer
 
-### 1. API Design: REST Conventions
+### 1. Design de API: Convenções REST
 
-Decision: Follow REST conventions for API design
+Decisão: Seguir convenções REST para design de API
 
 Endpoints:
-- GET /incidents: List all incidents
-- GET /incidents/:id: Get specific incident
-- POST /incidents: Create incident
-- PUT /incidents/:id: Update incident
-- DELETE /incidents/:id: Delete incident
+- GET /incidents: Listar todos os incidentes
+- GET /incidents/:id: Obter incidente específico
+- POST /incidents: Criar incidente
+- PUT /incidents/:id: Atualizar incidente
+- DELETE /incidents/:id: Deletar incidente
 
-Benefits:
-- Intuitive and predictable API
-- Standard approach across industry
-- Easy to document and test
-- Clear separation of concerns
+Benefícios:
+- API intuitiva e previsível
+- Abordagem padrão na indústria
+- Fácil de documentar e testar
+- Separação clara de responsabilidades
 
-### 2. Data Model: Incident-User Relationship
+### 2. Modelo de Dados: Relacionamento Incident-User
 
-Decision: Include user information with incident queries
+Decisão: Incluir informações de usuário com queries de incidente
 
-Implementation:
-- Prisma include relations in all incident queries
-- User data retrieved in single database round-trip
-- Eliminates N+1 query problem
-- Consistent data structure across endpoints
+Implementação:
+- Prisma include relations em todas as queries de incidente
+- Dados de usuário recuperados em single database round-trip
+- Elimina problema de N+1 query
+- Estrutura de dados consistente entre endpoints
 
-Benefits:
-- Better performance with fewer queries
-- Simplified frontend data handling
-- Consistent user information across application
+Benefícios:
+- Melhor performance com menos queries
+- Gerenciamento de dados simplificado no frontend
+- Informações de usuário consistentes na aplicação
 
-### 3. Authentication Flow
+### 3. Fluxo de Autenticação
 
-Flow:
-1. User submits credentials
-2. Backend validates and returns JWT token
-3. Frontend stores token in localStorage
-4. Client includes token in Authorization header
-5. Backend middleware validates token
-6. Request processed with user context
+Fluxo:
+1. Usuário submete credenciais
+2. Backend valida e retorna token JWT
+3. Frontend armazena token em localStorage
+4. Cliente inclui token em cabeçalho Authorization
+5. Backend middleware valida token
+6. Requisição processada com contexto de usuário
 
-Token Lifecycle:
-- Created on successful auth
-- Stored client-side
-- Sent with each protected request
-- Validated on backend
-- Expires after 7 days
+Ciclo de Vida do Token:
+- Criado em autenticação bem-sucedida
+- Armazenado client-side
+- Enviado com cada requisição protegida
+- Validado no backend
+- Expira após 7 dias
 
-### 4. Environment Configuration
+### 4. Configuração de Ambiente
 
-Strategy:
-- Backend: .env file for sensitive configuration
-- Frontend: VITE_ prefixed variables
-- Different configs for development and production
-- Version control excludes .env files
+Estratégia:
+- Backend: Arquivo .env para configuração sensível
+- Frontend: Variáveis prefixadas com VITE_
+- Configs diferentes para desenvolvimento e produção
+- Controle de versão exclui arquivos .env
 
-Best Practice:
-- Provide .env.example as template
-- Document required variables
-- Use sensible defaults for development
-- Require explicit production configuration
+Melhor Prática:
+- Fornecer .env.example como template
+- Documentar variáveis obrigatórias
+- Usar defaults sensatos para desenvolvimento
+- Requerer configuração explícita de produção
 
-## Testing Strategy
+## Estratégia de Testes
 
-### Backend Testing (19 tests)
+### Testes do Backend (19 testes)
 
-Focus Areas:
-- Authentication: Password hashing, JWT generation, validation
-- Data Validation: Input validation, business logic
-- Service Layer: Incident operations, data transformation
+Áreas de Foco:
+- Autenticação: Hashing de senha, geração JWT, validação
+- Validação de Dados: Validação de entrada, lógica de negócio
+- Camada de Serviço: Operações de incidente, transformação de dados
 
-Test Types:
-- Unit tests: Individual function behavior
-- Mocked dependencies: Isolated testing
-- Error scenarios: Edge cases and failures
+Tipos de Teste:
+- Testes unitários: Comportamento de função individual
+- Dependências mockadas: Testes isolados
+- Cenários de erro: Casos extremos e falhas
 
-Tools:
-- Jest: Test runner and assertion library
-- ts-jest: TypeScript compilation for tests
-- Mock functions: Dependency isolation
+Ferramentas:
+- Jest: Test runner e assertion library
+- ts-jest: Compilação TypeScript para testes
+- Mock functions: Isolamento de dependência
 
-### Frontend Testing (19 tests)
+### Testes do Frontend (19 testes)
 
-Focus Areas:
-- Authentication Context: Token management, user state
-- Hooks: Data fetching, state updates
-- Components: Rendering, user interactions
+Áreas de Foco:
+- Contexto de Autenticação: Gerenciamento de token, estado de usuário
+- Hooks: Busca de dados, atualizações de estado
+- Componentes: Renderização, interações do usuário
 
-Test Types:
-- Hook tests: Custom hook behavior
-- Component tests: Render output
-- User interaction tests: Event handling
+Tipos de Teste:
+- Testes de hook: Comportamento de hook customizado
+- Testes de componente: Saída renderizada
+- Testes de interação do usuário: Gerenciamento de evento
 
-Tools:
-- Vitest: Fast unit test framework
-- React Testing Library: Component testing
-- Mock API: Simulated backend
+Ferramentas:
+- Vitest: Framework de teste unitário rápido
+- React Testing Library: Testes de componente
+- API mockada: Backend simulado
 
-### Test Coverage
+### Cobertura de Testes
 
-Current Status:
-- Backend: 19 tests (unit focus)
-- Frontend: 19 tests (component focus)
-- Total: 38 tests passing
+Status Atual:
+- Backend: 19 testes (foco unitário)
+- Frontend: 19 testes (foco em componente)
+- Total: 38 testes aprovados
 
-Future Coverage Goals:
-- Integration tests for API endpoints
-- E2E tests with real browser automation
-- Performance benchmarking
-- Accessibility testing
+Objetivos de Cobertura Futura:
+- Testes de integração para endpoints de API
+- Testes E2E com automação de browser real
+- Benchmarking de performance
+- Testes de acessibilidade
 
-## Trade-offs Analysis
+## Análise de Trade-offs
 
-### 1. Simplicity vs. Features
+### 1. Simplicidade vs. Recursos
 
-Trade-off: Chose simplicity over advanced features
+Trade-off: Escolhido simplicidade sobre recursos avançados
 
-Reasoning:
-- Clear, maintainable codebase
-- Faster development and debugging
-- Easier for team onboarding
-- Foundation for future enhancements
+Fundamentação:
+- Codebase claro e mantível
+- Desenvolvimento e debugging mais rápido
+- Mais fácil para onboarding de equipe
+- Fundação para aprimoramentos futuros
 
-Examples:
-- No real-time notifications (add WebSockets later)
-- No pagination (add when needed)
-- No advanced analytics (add analytics library later)
+Exemplos:
+- Sem notificações em tempo real (adicionar WebSockets depois)
+- Sem paginação (adicionar quando necessário)
+- Sem analytics avançado (adicionar biblioteca de analytics depois)
 
-### 2. Scalability vs. Development Speed
+### 2. Escalabilidade vs. Velocidade de Desenvolvimento
 
-Trade-off: Prioritized development speed over maximum scalability
+Trade-off: Priorizado velocidade de desenvolvimento sobre escalabilidade máxima
 
-Reasoning:
-- SQLite suitable for MVP phase
-- Simple architecture easy to understand
-- Can upgrade database when scaling
-- Better time to market
+Fundamentação:
+- SQLite adequado para fase MVP
+- Arquitetura simples fácil de entender
+- Pode fazer upgrade de banco de dados ao escalar
+- Melhor time to market
 
-Migration Path:
+Caminho de Migração:
 - SQLite -> PostgreSQL
-- REST -> GraphQL (if needed)
-- Simple auth -> OAuth2
-- Basic logging -> Enterprise logging
+- REST -> GraphQL (se necessário)
+- Auth simples -> OAuth2
+- Logging básico -> Enterprise logging
 
-### 3. Type Safety vs. Bundle Size
+### 3. Type Safety vs. Tamanho de Bundle
 
-Trade-off: Chose type safety over minimal bundle size
+Trade-off: Escolhido type safety sobre tamanho mínimo de bundle
 
-Reasoning:
-- TypeScript catches errors at compile time
-- Better IDE support and developer experience
-- Type definitions provide documentation
-- Bundle size impact minimal for web application
+Fundamentação:
+- TypeScript captura erros em tempo de compilação
+- Melhor suporte de IDE e experiência de desenvolvedor
+- Definições de tipo fornecem documentação
+- Impacto de bundle size mínimo para aplicação web
 
-### 4. User Control vs. Pre-built Components
+### 4. Controle de Usuário vs. Componentes Pre-built
 
-Trade-off: Used Shadcn/ui for balance of features and customization
+Trade-off: Usado Shadcn/ui para equilíbrio de features e customização
 
-Reasoning:
-- Pre-built components save development time
-- Copy-paste approach maintains full control
-- Customizable for specific needs
-- Not locked into component library versions
+Fundamentação:
+- Componentes pre-built economizam tempo de desenvolvimento
+- Abordagem copy-paste mantém controle total
+- Customizável para necessidades específicas
+- Não locked-in versões de biblioteca de componentes
 
-## Security Considerations
+## Considerações de Segurança
 
-### Current Implementation
+### Implementação Atual
 
-- Bcrypt password hashing (10 rounds)
-- JWT token authentication
-- CORS configuration
-- Input validation on both layers
-- No sensitive data in logs
+- Hashing de senha Bcrypt (10 rodadas)
+- Autenticação por token JWT
+- Configuração de CORS
+- Validação de entrada em ambas camadas
+- Sem dados sensíveis em logs
 
-### Production Recommendations
+### Recomendações para Produção
 
-- Enable HTTPS/TLS encryption
-- Implement rate limiting on login attempts
-- Add CSRF token protection
-- Implement API request signing
-- Set security headers (CORS, CSP, etc.)
-- Regular security audits
-- Dependency vulnerability scanning
-- SQL injection prevention (Prisma handles this)
-- XSS prevention (React handles this)
-- OWASP compliance
+- Ativar criptografia HTTPS/TLS
+- Implementar limite de taxa em tentativas de login
+- Adicionar proteção de token CSRF
+- Implementar assinatura de requisição de API
+- Definir headers de segurança (CORS, CSP, etc.)
+- Auditorias de segurança regulares
+- Scanning de vulnerabilidade de dependência
+- Prevenção de SQL injection (Prisma trata isto)
+- Prevenção de XSS (React trata isto)
+- Conformidade OWASP
 
-### Authentication Enhancements
+### Aprimoramentos de Autenticação
 
-Future considerations:
-- OAuth2/OIDC for third-party authentication
-- Multi-factor authentication (MFA)
-- Session management improvements
-- Token refresh rotation
-- Device tracking and management
+Considerações futuras:
+- OAuth2/OIDC para autenticação de terceiros
+- Autenticação multi-fator (MFA)
+- Aprimoramentos de gerenciamento de sessão
+- Rotação de token de refresh
+- Rastreamento e gerenciamento de dispositivo
 
-## Performance Considerations
+## Considerações de Performance
 
-### Current Optimizations
+### Otimizações Atuais
 
-- Frontend route lazy loading
-- Component memoization capabilities
-- Database query optimization with Prisma relations
-- CSS tree-shaking with Tailwind
-- Minified production builds
+- Lazy loading de rota do frontend
+- Capacidades de memoização de componentes
+- Otimização de query de banco de dados com Prisma relations
+- Tree-shaking de CSS com Tailwind
+- Builds de produção minificados
 
-### Frontend Performance
+### Performance do Frontend
 
-- Vite's fast development server
-- React 18 concurrent rendering
-- Efficient component re-rendering
-- Optimized bundle splitting
-- Caching strategies
+- Servidor de desenvolvimento rápido do Vite
+- Renderização concorrente React 18
+- Re-renderização eficiente de componente
+- Split de bundle otimizado
+- Estratégias de caching
 
-### Backend Performance
+### Performance do Backend
 
-- Efficient database queries
+- Queries de banco de dados eficientes
 - Connection pooling via Prisma
-- Request validation early in pipeline
-- Response compression ready
+- Validação de requisição early em pipeline
+- Compressão de resposta pronta
 
-### Recommended Enhancements
+### Aprimoramentos Recomendados
 
-- Implement caching strategy (Redis)
-- Add database indexing as data grows
-- CDN for static assets
-- Server-side pagination
-- Query result caching
-- Database query performance monitoring
+- Implementar estratégia de caching (Redis)
+- Adicionar indexação de banco de dados conforme dados crescem
+- CDN para assets estáticos
+- Paginação server-side
+- Caching de resultado de query
+- Monitoramento de performance de query de banco de dados
 
-## Future Recommendations
+## Recomendações Futuras
 
-### Short Term (Next Sprint)
+### Curto Prazo (Próximo Sprint)
 
-- Implement pagination for incidents list
-- Add advanced filtering and search
-- Implement logout functionality
-- Add incident categorization
-- Create incident templates
+- Implementar paginação para lista de incidentes
+- Adicionar filtro avançado e busca
+- Implementar funcionalidade de logout
+- Adicionar categorização de incidente
+- Criar templates de incidente
 
-### Medium Term (Next Quarter)
+### Médio Prazo (Próximo Trimestre)
 
-- Real-time updates using WebSockets
-- File attachment support
-- Comment/discussion system
-- Incident analytics dashboard
-- Export functionality (CSV, PDF)
+- Updates em tempo real usando WebSockets
+- Suporte de anexo de arquivo
+- Sistema de comentário/discussão
+- Dashboard de analytics de incidente
+- Funcionalidade de exportação (CSV, PDF)
 
-### Long Term (Next Year)
+### Longo Prazo (Próximo Ano)
 
-- GraphQL API alternative
-- Mobile native apps
-- Third-party integrations
-- Advanced reporting
-- Machine learning for incident categorization
-- Automated incident creation
-- Incident prediction
+- Alternativa de API GraphQL
+- Apps mobile nativas
+- Integrações de terceiros
+- Relatórios avançados
+- Machine learning para categorização de incidente
+- Criação de incidente automatizada
+- Predição de incidente
 
-### Infrastructure
+### Infraestrutura
 
-- Containerization (Docker)
-- Kubernetes orchestration
-- CI/CD pipeline automation
-- Monitoring and alerting
-- Automated backups
-- Disaster recovery planning
-- Multi-region deployment
+- Containerização (Docker)
+- Orquestração Kubernetes
+- Automação de pipeline CI/CD
+- Monitoramento e alerting
+- Backups automatizados
+- Planejamento de recuperação de desastre
+- Deployment multi-região
 
-### Testing Enhancements
+### Aprimoramentos de Testes
 
-- E2E testing with Cypress/Playwright
-- Performance testing and benchmarking
-- Load testing and stress testing
-- Security penetration testing
-- Accessibility testing (WCAG compliance)
-- Cross-browser testing
+- Testes E2E com Cypress/Playwright
+- Testes de performance e benchmarking
+- Testes de carga e stress testing
+- Testes de penetração de segurança
+- Testes de acessibilidade (WCAG compliance)
+- Testes cross-browser
 
-## Conclusion
+## Conclusão
 
-The Fullstack Web Platform demonstrates pragmatic architectural decisions that balance development speed, code maintainability, and scalability potential. The chosen technologies form a solid foundation for both current requirements and future growth.
+A Plataforma Web Full-stack demonstra decisões arquiteturais pragmáticas que equilibram velocidade de desenvolvimento, maintibilidade de código e potencial de escalabilidade. As tecnologias escolhidas formam uma fundação sólida tanto para requisitos atuais quanto para crescimento futuro.
 
-The application prioritizes developer experience and code clarity while maintaining the flexibility to evolve with changing requirements. The modular architecture enables incremental improvements without requiring major refactoring.
+A aplicação prioriza experiência de desenvolvedor e clareza de código enquanto mantém flexibilidade para evoluir com requisitos mutáveis. A arquitetura modular permite aprimoramentos incrementais sem requerer refatoração maior.
 
-Future enhancements should follow the same principles: make decisions based on concrete requirements rather than theoretical scalability, and maintain code clarity as the project grows in complexity.
+Aprimoramentos futuros devem seguir os mesmos princípios: tomar decisões baseadas em requisitos concretos ao invés de escalabilidade teórica, e manter clareza de código conforme o projeto cresce em complexidade.
