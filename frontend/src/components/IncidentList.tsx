@@ -48,7 +48,8 @@ export function IncidentList() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+    <div className="flex flex-col gap-5 p-5">
+      <Separator orientation="horizontal"/>
       {error && (
         <Alert variant="destructive" className="text-xs sm:text-sm">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -79,6 +80,7 @@ export function IncidentList() {
           </p>
         </div>
       </div>
+      <Separator orientation="horizontal"/>
 
       {incidents.length === 0 ? (
         <div className="w-full flex flex-col justify-center items-center bg-transparent">
@@ -90,27 +92,29 @@ export function IncidentList() {
           </CardContent>
         </div>
       ) : (
-        <div className="grid gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
           {incidents.map((incident) => (
-            <Card key={incident.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-2 sm:pb-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4">
-                  <div className="flex-1 min-w-0">
+            <Card key={incident.id} className="border-1 border-primary/50 hover:border-primary gap-5">
+              <CardHeader>
+                <div className="flex flex-col">
+                  <div className="flex flex-row justify-between items-center">
                     <CardTitle className="text-sm sm:text-base truncate">{incident.title}</CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">
+                    <Badge className={`${statusColors[incident.status]} text-xs sm:text-sm flex-shrink-0`}>
+                      {incident.status === "open" ? "Aberto" :
+                      incident.status === "in-progress" ? "Em Progresso" :
+                      "Fechado"}
+                    </Badge>
+                  </div>
+                  <CardDescription className="text-xs font-light">
                       {new Date(incident.createdAt).toLocaleDateString("pt-BR")}
                     </CardDescription>
-                  </div>
-                  <Badge className={`${statusColors[incident.status]} text-xs sm:text-sm flex-shrink-0`}>
-                    {incident.status === "open" ? "Aberto" :
-                     incident.status === "in-progress" ? "Em Progresso" :
-                     "Fechado"}
-                  </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-3 sm:space-y-4">
+              <CardContent className="flex flex-col justify-center gap-5">
+                <Separator orientation="horizontal"/>
                 <p className="text-xs sm:text-sm text-foreground line-clamp-3">{incident.description}</p>
-                <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2 border-t">
+                <Separator orientation="horizontal"/>
+                <div className="flex flex-row justify-around items-center">
                   <UpdateIncidentDialog
                     incident={incident}
                     onSuccess={refetch}

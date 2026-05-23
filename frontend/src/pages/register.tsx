@@ -46,7 +46,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-      <Card className="w-full max-w-md border-2 sm:border-5 border-primary py-7">
+      <Card className="w-full max-w-md border-1 border-primary py-7">
         <CardHeader className="w-full flex flex-col justify-center items-center gap-2 sm:gap-3">
           <CardTitle className="text-foreground uppercase font-bold text-lg sm:text-xl">Registre-se</CardTitle>
           <CardDescription className="text-xs sm:text-sm text-center">Crie uma nova conta para começar</CardDescription>

@@ -65,13 +65,13 @@ export function CreateIncidentDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="text-xs font-bold uppercase">Criar Incidente</Button>
+        <Button className="text-xs font-bold uppercase">Reportar Incidente</Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-between px-5 gap-5">
         <DialogHeader className="flex flex-col justify-center items-center pt-5 gap-2">
           <DialogTitle className="uppercase font-bold text-lg">Novo Incidente</DialogTitle>
           <DialogDescription className="hyphens-auto text-justify">
-            Adicione um novo incidente preenchendo o formulário abaixo.
+            Reporte um novo incidente preenchendo o formulário abaixo.
           </DialogDescription>
         </DialogHeader>
 
@@ -149,7 +149,7 @@ export function CreateIncidentDialog({
               Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="text-xs font-bold uppercase">
-              {loading ? "Criando..." : "Criar"}
+              {loading ? "Reportando..." : "Reportar"}
             </Button>
           </div>
         </form>
