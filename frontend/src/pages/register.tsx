@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +36,7 @@ export default function Register() {
         password,
       });
       setToken(result.token);
+      setUser(result.user);
       navigate("/incidents");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao registrar");

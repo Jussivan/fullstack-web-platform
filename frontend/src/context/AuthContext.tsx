@@ -10,21 +10,33 @@ interface AuthContextType {
   logout: () => void;
   isLoading: boolean;
   setToken: (token: string | null) => void;
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUserState] = useState<User | null>(null);
   const [token, setTokenState] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se há token salvo
+    // Verificar se há token e usuário salvos
     const savedToken = api.auth.getToken();
+    const savedUser = localStorage.getItem("user");
+    
     if (savedToken) {
       setTokenState(savedToken);
     }
+    
+    if (savedUser) {
+      try {
+        setUserState(JSON.parse(savedUser));
+      } catch (e) {
+        localStorage.removeItem("user");
+      }
+    }
+    
     setIsLoading(false);
   }, []);
 
@@ -37,10 +49,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const setUser = (newUser: User | null) => {
+    setUserState(newUser);
+    if (newUser) {
+      localStorage.setItem("user", JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem("user");
+    }
+  };
+
   const logout = () => {
     api.auth.logout();
-    setUser(null);
+    setUserState(null);
     setTokenState(null);
+    localStorage.removeItem("user");
   };
 
   return (
@@ -52,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         isLoading,
         setToken,
+        setUser,
       }}
     >
       {children}

@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,6 +24,7 @@ export default function Login() {
     try {
       const result = await api.auth.login({ email, password });
       setToken(result.token);
+      setUser(result.user);
       navigate("/incidents");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao fazer login");
