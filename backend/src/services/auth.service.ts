@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../lib/prisma";
 import type { CreateUserInput, LoginInput, User, AuthResponse } from "../types/user.types";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";

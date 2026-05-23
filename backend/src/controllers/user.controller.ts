@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../lib/prisma";
 import { logger } from "../logger/logger";
 import type { AuthenticatedRequest } from "../middlewares/auth";
 
