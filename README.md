@@ -1,281 +1,313 @@
-# Fullstack Web Platform - Gerenciamento de Incidentes
+# Fullstack Web Platform - Incident Management System
 
-Uma aplicação fullstack para gerenciamento de incidentes construída com **Express**, **Prisma**, **SQLite** e **React**.
+A production-ready fullstack application for incident management built with modern technologies and best practices.
 
-## 🎯 Funcionalidades
+## Overview
 
-- ✅ Criar incidentes
-- ✅ Listar incidentes
-- ✅ Atualizar incidentes
-- ✅ Deletar incidentes com confirmação
-- ✅ Validação de formulários
-- ✅ Interface escura (dark mode)
-- ✅ Responsiva
+This project implements a complete incident reporting and management system with user authentication, real-time incident tracking, and a responsive user interface. The application demonstrates comprehensive full-stack development practices including backend API development, database design, frontend architecture, and extensive testing.
 
-## 🛠️ Tecnologias
+## Features
+
+- User authentication with JWT tokens (7-day expiration)
+- Create, read, update, and delete incidents
+- Real-time user association with incidents
+- Responsive design for mobile and desktop
+- Comprehensive input validation on client and server
+- Dark mode interface
+- User profile management
+- 38 passing tests (19 backend, 19 frontend)
+
+## Technology Stack
 
 ### Backend
-- **Express.js** - Framework web
-- **Prisma** - ORM para banco de dados
-- **SQLite** - Banco de dados
-- **TypeScript** - Tipagem estática
-- **CORS** - Compartilhamento de recursos entre origens
-- **Zod** - Validação de dados
+- Express.js: RESTful API framework
+- TypeScript: Static type checking
+- Prisma: Type-safe ORM with SQLite
+- JWT: Secure token-based authentication
+- Bcrypt: Password hashing (10 salt rounds)
+- Zod: Runtime type validation
+- Jest: Unit testing framework
 
 ### Frontend
-- **React 18** - Biblioteca UI
-- **TypeScript** - Tipagem estática
-- **Tailwind CSS** - Framework CSS
-- **Shadcn/ui** - Componentes UI de alta qualidade
-- **Zod** - Validação de esquemas
-- **Vite** - Build tool
+- React 18: Modern UI library with hooks
+- TypeScript: Full type safety
+- Vite: Lightning-fast build tool
+- Tailwind CSS: Utility-first CSS framework
+- Shadcn/ui: High-quality component library
+- React Router: Client-side routing
+- Vitest: Component and hook testing
 
-## 📋 Pré-requisitos
+## Prerequisites
 
-- Node.js (v18+)
-- npm ou yarn
+Node.js v18.0.0 or higher
+npm v9.0.0 or higher
 
-## 🚀 Como Executar
+Verify installation:
+```bash
+node --version
+npm --version
+```
 
-### 1. Clonar o Repositório
+## Installation and Setup
+
+### 1. Clone Repository
 
 ```bash
-git clone <seu-repositorio>
+git clone https://github.com/yourusername/fullstack-web-platform.git
 cd fullstack-web-platform
 ```
 
-### 2. Backend
+### 2. Backend Configuration
 
 ```bash
 cd backend
 
-# Instalar dependências
 npm install
 
-# Configurar variáveis de ambiente (criar arquivo .env)
-echo "DATABASE_URL=file:./dev.db" > .env
+# Create .env file
+cp .env.example .env
 
-# Executar migrações do Prisma (se necessário)
-npx prisma db push
+# Set up database and run migrations
+npx prisma migrate dev
 
-# Iniciar o servidor em desenvolvimento
+# Start development server
 npm run dev
 ```
 
-O servidor estará disponível em `http://localhost:3000`
+Backend runs on http://localhost:3000
 
-### 3. Frontend
+### 3. Frontend Configuration
 
 ```bash
 cd frontend
 
-# Instalar dependências
 npm install
 
-# Criar arquivo .env.local
-echo "VITE_API_URL=http://localhost:3000/api" > .env.local
+# Create .env file
+VITE_API_URL=http://localhost:3000/api
 
-# Iniciar em desenvolvimento
+# Start development server
 npm run dev
 ```
 
-O frontend estará disponível em `http://localhost:5173`
+Frontend runs on http://localhost:5173
 
-## 📁 Estrutura do Projeto
+## Environment Variables
+
+### Backend (.env)
+
+```bash
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="your-secret-key-here"
+NODE_ENV="development"
+PORT=3000
+```
+
+### Frontend (.env)
+
+```bash
+VITE_API_URL="http://localhost:3000/api"
+```
+
+## Running Tests
+
+### Backend Tests
+
+```bash
+cd backend
+npm test                 # Run all tests
+npm run test:watch      # Watch mode
+npm run test:coverage   # Coverage report
+```
+
+Test coverage: 19 passing tests
+- Auth service validation (password hashing, JWT, email validation)
+- Incident service validation (data structure, status management)
+
+### Frontend Tests
+
+```bash
+cd frontend
+npm test -- --run       # Run once
+npm test                # Watch mode
+npm test:ui             # UI mode
+```
+
+Test coverage: 19 passing tests
+- Authentication context and token management
+- Incidents hook and data fetching
+- Component rendering and interactions
+
+## Project Structure
 
 ```
 fullstack-web-platform/
 ├── backend/
 │   ├── src/
-│   │   ├── index.ts              # Entrada da aplicação
-│   │   ├── server.ts             # Configuração do Express
-│   │   ├── controllers/          # Controladores
-│   │   ├── services/             # Lógica de negócio
-│   │   ├── routes/               # Rotas da API
-│   │   ├── types/                # Tipos TypeScript
-│   │   ├── lib/
-│   │   │   └── prisma.ts         # Instância do Prisma
-│   │   ├── logger/               # Sistema de logging
-│   │   └── middlewares/          # Middlewares
+│   │   ├── server.ts              Main application
+│   │   ├── controllers/           Route handlers
+│   │   ├── services/              Business logic
+│   │   ├── routes/                API route definitions
+│   │   ├── middlewares/           Express middleware
+│   │   ├── lib/                   Utilities and configuration
+│   │   ├── logger/                Logging system
+│   │   ├── types/                 TypeScript definitions
+│   │   └── __tests__/             Test files (19 tests)
 │   ├── prisma/
-│   │   └── schema.prisma         # Schema do banco de dados
-│   ├── generated/                # Cliente Prisma gerado
+│   │   ├── schema.prisma          Database schema
+│   │   └── migrations/            Database migrations
+│   ├── jest.config.js             Test configuration
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── main.tsx              # Entrada
-│   │   ├── App.tsx               # Componente raiz
-│   │   ├── components/           # Componentes React
-│   │   ├── pages/                # Páginas
-│   │   ├── hooks/                # Custom hooks
-│   │   ├── services/             # Cliente HTTP
-│   │   ├── schemas/              # Validações Zod
-│   │   ├── types/                # Tipos TypeScript
-│   │   └── lib/                  # Utilitários
-│   ├── index.html
+│   │   ├── main.tsx               Entry point
+│   │   ├── App.tsx                Root component
+│   │   ├── pages/                 Page components
+│   │   ├── components/            Reusable components
+│   │   ├── context/               React context providers
+│   │   ├── hooks/                 Custom React hooks
+│   │   ├── services/              API client
+│   │   ├── types/                 TypeScript definitions
+│   │   └── __tests__/             Test files (19 tests)
+│   ├── vitest.config.ts           Test configuration
 │   └── package.json
 │
-└── README.md
+├── API.md                         Complete API documentation
+├── TECHNICAL_NOTES.md             Architecture and design decisions
+└── README.md                      This file
 ```
 
-## 📡 API Endpoints
+## API Documentation
 
-### Base URL: `http://localhost:3000/api`
+For complete endpoint documentation with examples, see [API.md](./API.md)
 
-#### **GET /incidents**
-Retorna todos os incidentes.
+Quick reference:
+- POST /api/auth/register: User registration
+- POST /api/auth/login: Authentication
+- GET /api/users/profile: User profile
+- GET /api/incidents: List incidents
+- POST /api/incidents: Create incident
+- PUT /api/incidents/:id: Update incident
+- DELETE /api/incidents/:id: Delete incident
 
-**Response (200):**
-```json
-[
-  {
-    "id": "uuid-123",
-    "title": "Servidor Down",
-    "description": "O servidor não está respondendo",
-    "status": "open",
-    "createdAt": "2026-05-21T15:51:47.723Z"
-  }
-]
-```
+## Database Schema
 
----
+### User Table
+- id: UUID primary key
+- email: Unique email
+- name: Full name
+- password: Bcrypt hashed
+- createdAt: Timestamp
+- updatedAt: Timestamp
 
-#### **GET /incidents/:id**
-Retorna um incidente específico.
+### Incident Table
+- id: UUID primary key
+- title: Incident title
+- description: Detailed description
+- status: open | in-progress | closed
+- userId: Foreign key to User
+- createdAt: Timestamp
+- updatedAt: Timestamp
+- user: Related user data (included in queries)
 
-**Response (200):**
-```json
-{
-  "id": "uuid-123",
-  "title": "Servidor Down",
-  "description": "O servidor não está respondendo",
-  "status": "open",
-  "createdAt": "2026-05-21T15:51:47.723Z"
-}
-```
+## Authentication
 
-**Response (404):**
-```json
-{
-  "error": "Incident not found"
-}
-```
+JWT-based authentication with 7-day token expiration:
 
----
+1. User registers or logs in
+2. Server returns JWT token
+3. Client stores token in localStorage
+4. Token sent in Authorization header for protected routes
+5. Server validates token on each request
 
-#### **POST /incidents**
-Cria um novo incidente.
+Security measures:
+- Passwords hashed with bcrypt (10 rounds)
+- No password returned in API responses
+- JWT tokens expire after 7 days
+- Minimum password length: 6 characters
 
-**Request Body:**
-```json
-{
-  "title": "Novo Incidente",
-  "description": "Descrição detalhada",
-  "status": "open"
-}
-```
+## Validation
 
-**Response (201):**
-```json
-{
-  "id": "uuid-123",
-  "title": "Novo Incidente",
-  "description": "Descrição detalhada",
-  "status": "open",
-  "createdAt": "2026-05-21T15:51:47.723Z"
-}
-```
+Comprehensive validation implemented on both layers:
 
----
+Frontend:
+- Real-time form validation with Zod
+- User-friendly error messages
+- Input type and length validation
 
-#### **PUT /incidents/:id**
-Atualiza um incidente.
+Backend:
+- Zod schema validation
+- Business logic validation
+- Database constraint validation
 
-**Request Body:**
-```json
-{
-  "title": "Incidente Atualizado",
-  "status": "in-progress"
-}
-```
+## Error Handling
 
-**Response (200):**
-```json
-{
-  "id": "uuid-123",
-  "title": "Incidente Atualizado",
-  "description": "Descrição detalhada",
-  "status": "in-progress",
-  "createdAt": "2026-05-21T15:51:47.723Z"
-}
-```
+Consistent error responses with:
+- Descriptive error messages
+- Appropriate HTTP status codes
+- Error logging for debugging
+- User-friendly frontend messages
 
----
+## Troubleshooting
 
-#### **DELETE /incidents/:id**
-Deleta um incidente.
-
-**Response (204):** Sem conteúdo
-
----
-
-## 🧪 Testes (Em Desenvolvimento)
-
-Para executar os testes:
-
+### Port Already in Use
 ```bash
-# Backend
-cd backend
-npm run test
-
-# Frontend
-cd frontend
-npm run test
+PORT=3001 npm run dev    # Backend
+VITE_PORT=5174 npm run dev  # Frontend
 ```
 
-## 🏗️ Decisões Arquiteturais
+### Database Issues
+```bash
+cd backend
+npx prisma migrate reset    # Reset database
+npx prisma db push          # Push schema
+```
 
-### Backend
-- **Express**: Framework minimalista e flexível para APIs REST
-- **Prisma**: ORM type-safe que simplifica operações de banco
-- **SQLite**: Banco de dados leve, ideal para desenvolvimento
-- **CORS**: Habilitado para comunicação frontend-backend
+### Dependencies Not Installing
+```bash
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
 
-### Frontend
-- **React + TypeScript**: Componentes type-safe e reutilizáveis
-- **Tailwind CSS**: Utility-first para estilos consistentes
-- **Shadcn/ui**: Componentes pré-construídos e acessíveis
-- **Zod**: Validação em tempo de execução e type inference
+### Backend Connection Issues
+- Verify backend running on http://localhost:3000
+- Check VITE_API_URL in frontend .env
+- Confirm CORS enabled
+- Check firewall settings
 
-## 📝 Trade-offs
+## Performance Considerations
 
-| Decisão | Benefício | Trade-off |
-|---------|-----------|-----------|
-| SQLite | Sem setup de banco externo | Limitado para produção com alto volume |
-| Prisma | Type-safe queries | Curva de aprendizado |
-| Tailwind | Development rápido | CSS bundle maior |
-| Shadcn/ui | UI consistente | Dependência de bibliotecas externas |
+- Lazy loading on routes
+- Component memoization
+- Optimized database queries with relations
+- CSS bundling optimized by Tailwind
+- Minified production builds
 
-## 🚀 Possíveis Melhorias Futuras
+## Security Considerations
 
-- [ ] Autenticação e autorização (JWT)
-- [ ] Paginação de incidentes
-- [ ] Filtros e busca avançada
-- [ ] Histórico de alterações
-- [ ] Upload de anexos
-- [ ] Notificações em tempo real (WebSockets)
-- [ ] Testes automatizados completos
-- [ ] Deploy em produção (Vercel/Railway)
-- [ ] Monitoramento e logging avançado
-- [ ] API GraphQL como alternativa
+Production recommendations:
+- Enable HTTPS/SSL
+- Implement rate limiting
+- Add request logging and monitoring
+- Use environment-specific configurations
+- Implement request/response encryption
+- Set up automated backups
+- Enable API request throttling
 
-## 🐛 Desafios Encontrados
+## Development Workflow
 
-1. **Configuração de CORS**: Resolvido importando e usando middleware `cors`
-2. **Tipagem de Params do Express**: Resolvido com `as { id: string }`
-3. **Sincronização Frontend-Backend**: Hooks custom para estado compartilhado
+1. Create feature branch
+2. Make changes with tests
+3. Run test suites to verify
+4. Commit with descriptive messages
+5. Push to repository
 
-## 📧 Contato
+## License
 
-Para dúvidas ou sugestões, abra uma issue no repositório.
+MIT License
+
+## Support
+
+For issues or questions, create an issue in the repository.
