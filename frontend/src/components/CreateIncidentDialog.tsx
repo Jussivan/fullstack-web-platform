@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 interface CreateIncidentDialogProps {
   open: boolean;
@@ -74,8 +75,8 @@ export function CreateIncidentDialog({
             Reporte um novo incidente preenchendo o formulário abaixo.
           </DialogDescription>
         </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <Separator orientation="horizontal"/>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-7">
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-5 w-5" />
@@ -137,8 +138,9 @@ export function CreateIncidentDialog({
               </SelectContent>
             </Select>
           </div>
-
-          <div className="flex gap-3 justify-end pt-4">
+        </form>
+        <Separator orientation="horizontal"/>
+        <div className="flex flex-row justify-around items-center">
             <Button
               type="button"
               variant="outline"
@@ -152,7 +154,6 @@ export function CreateIncidentDialog({
               {loading ? "Reportando..." : "Reportar"}
             </Button>
           </div>
-        </form>
       </DialogContent>
     </Dialog>
   );

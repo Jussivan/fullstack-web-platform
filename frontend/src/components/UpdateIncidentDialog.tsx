@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Edit2 } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 interface UpdateIncidentDialogProps {
   incident: Incident;
@@ -77,8 +78,8 @@ export function UpdateIncidentDialog({
             Atualize as informações do incidente preenchendo o formulário abaixo.
           </DialogDescription>
         </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <Separator orientation="horizontal"/>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-7">
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-5 w-5" />
@@ -139,9 +140,10 @@ export function UpdateIncidentDialog({
                 <SelectItem value="closed">Fechado</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          <div className="flex gap-3 justify-end pt-4">
+          </div>          
+        </form>
+        <Separator orientation="horizontal"/>
+        <div className="flex flex-row justify-around items-center">
             <Button
               type="button"
               variant="outline"
@@ -154,8 +156,7 @@ export function UpdateIncidentDialog({
             <Button type="submit" disabled={loading} className="text-xs font-bold uppercase">
               {loading ? "Atualizando..." : "Atualizar"}
             </Button>
-          </div>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -34,8 +34,8 @@ export function DeleteConfirmDialog({
           Deletar
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
+      <AlertDialogContent className="flex flex-col">
+        <AlertDialogHeader className="flex flex-col gap-5">
           <AlertDialogTitle className="uppercase font-bold">
             Deletar Incidente?
           </AlertDialogTitle>
@@ -43,7 +43,7 @@ export function DeleteConfirmDialog({
             Tem certeza que deseja deletar o incidente "<strong>{incidentTitle}</strong>"? Esta ação não pode ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="flex gap-3 justify-end">
+        <div className="flex flex-row justify-around items-center">
           <AlertDialogCancel className="text-xs font-bold uppercase">
             Cancelar
           </AlertDialogCancel>
